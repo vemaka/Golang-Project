@@ -1,6 +1,7 @@
 package router
 
 import (
+	"Golang/types"
 	"context"
 	"errors"
 	"fmt"
@@ -30,14 +31,13 @@ func NewRouter() *Router {
 	return router
 }
 
-type HTTPReq struct {
-	ServiceName string
-	Method      string
-	Body        string
-}
+func GetHTTPReqFromContext(ctx context.Context) (*types.HTTPReq, error) {
 
-func GetHTTPReqFromContext(ctx context.Context) (*HTTPReq, error) {
-	httpReq, ok := ctx.Value("httpReq").(HTTPReq)
+	// ctxValue := ctx.Value("httpReq")
+	// fmt.Printf("Context value: %#v, Type: %T\n", ctxValue, ctxValue)
+
+	httpReq, ok := ctx.Value("httpReq").(types.HTTPReq)
+	// fmt.Printf("GetHTTPReqFromContext ---------- Context value: %+v\n", httpReq)
 	if !ok {
 		return nil, errors.New("failed to get HTTPReq from context")
 	}
@@ -48,17 +48,23 @@ func (r *Router) AddRouter(path string, method string, handle http.HandlerFunc) 
 	r.handlers[path+"|"+method] = RouterHandler{path: path, method: method, handle: handle}
 }
 
-func ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
+
+	ctxValue := ctx.Value("httpReq")
+	fmt.Printf("Context value: %+v\n", ctxValue)
+
 	httpReq, err := GetHTTPReqFromContext(ctx)
 	if err != nil {
 		http.Error(w, "Failed to extract HTTPReq", http.StatusInternalServerError)
+		// fmt.Printf("In router ServeHTTP, httpReq: %+v\n", httpReq)
 		return
 	}
 
 	handle, ok := DiscoverService(httpReq.ServiceName, httpReq.Method)
 	if !ok {
 		http.NotFound(w, req)
+		fmt.Println("router not found")
 		return
 	}
 

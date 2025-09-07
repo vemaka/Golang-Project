@@ -1,7 +1,8 @@
 package main
 
 import (
-	// handlers "Golang/handler"
+	gw "Golang/gw"
+	"Golang/handler"
 	"fmt"
 	"net/http"
 )
@@ -9,14 +10,15 @@ import (
 // 注册统一API接口
 func main() {
 
-	g := NewGWMux()
+	g := gw.NewGWMux()
 
 	mux := http.NewServeMux()
 
-	mux.Handle("/",g)
-	
+	mux.Handle("/", g)
 
-	err := http.ListenAndServe(":8080", nil)
+	handler.RegisterAllServices()
+
+	err := http.ListenAndServe(":8080", mux)
 	if err != nil {
 		fmt.Println("8080 port listen failed")
 	}

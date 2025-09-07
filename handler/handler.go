@@ -7,9 +7,21 @@ import (
 )
 
 // TEST
-func HelloWorld(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("Hello World!!!")
-	w.Write([]byte("Hello World!!!!"))
+func GOODSell(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("Sell good!!!")
+	w.Write([]byte("Sell good!!!!"))
+}
+
+// TEST
+func GOODSave(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("Save good!!!")
+	w.Write([]byte("Save good!!!!"))
+}
+
+// TEST
+func GOODBuy(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("Buy good!!!")
+	w.Write([]byte("Buy good!!!!"))
 }
 
 // GetOptions : 实现Get方法的具体内容

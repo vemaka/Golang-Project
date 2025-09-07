@@ -1,4 +1,4 @@
-package main
+package gw
 
 import (
 	"context"
@@ -6,10 +6,14 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	r "Golang/router"
+	"Golang/types"
 )
 
 type gw_mux struct {
-	s *Server
+	s      *Server
+	router *r.Router
 }
 
 type Server struct {
@@ -18,14 +22,13 @@ type Server struct {
 	Mux  http.ServeMux
 }
 
-type HTTPReq struct {
-	ServiceName string
-	Method      string
-	Body        string
-}
-
 func NewGWMux() *gw_mux {
-	mux := new(gw_mux)
+	mux := &gw_mux{
+		s: &Server{
+			Mux: *http.NewServeMux(),
+		},
+		router: r.NewRouter(),
+	}
 
 	return mux
 }
@@ -72,22 +75,29 @@ func extract_parameter(req *http.Request) (string, error) {
 
 func (m *gw_mux) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
-	str,err := extract_parameter(req)
+	// fmt.Println("Entering gw_mux ServeHTTP")
+
+	str, err := extract_parameter(req)
 	if err != nil {
 		fmt.Println("Get json name failed")
 		return
 	}
 
 	// 组装请求
-	httpReq := HTTPReq{
+	httpReq := types.HTTPReq{
 		ServiceName: req.URL.Path,
-		Method: req.Method,
-		Body: str,
+		Method:      req.Method,
+		Body:        str,
 	}
 
 	// 调用下游服务接口
-	ctx := context.WithValue(req.Context(),"httpReq",httpReq)
+	ctx := context.WithValue(req.Context(), "httpReq", httpReq)
 	req = req.WithContext(ctx)
 
-	m.s.Mux.ServeHTTP(w, req)
+	// fmt.Printf("httpReq: %+v\n", httpReq)
+	// r.RegisterService("/good","GET",handle.GOODBuy)
+	// r.RegisterService("/good","POST",handle.GOODSell)
+	// r.RegisterService("/good","PUT",handle.GOODSave)
+
+	m.router.ServeHTTP(w, req)
 }
