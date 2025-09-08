@@ -6,15 +6,15 @@
     ├── gw # 网关相关代码
     │ └── mux.go
     ├── handler # 处理具体业务逻辑的模块
-    │ ├── handler.go
-    │ └── server.go
-    ├── middleware # 中间件模块，用于处理跨切面关注点
-    │ ├── healthcheck.go
-    │ ├── logging.go
+    │ ├── handler.go       # 业务实现
+    │ └── server.go 
+    ├── middleware # 中间件模块
+    │ ├── healthcheck.go    # 轻答响应
+    │ ├── logging.go        # 日志
     │ └── middleware.go
-    ├── router # 路由相关代码
-    │ ├── discover.go
-    │ ├── register.go
+    ├── router # 路由管理
+    │ ├── discover.go    # 服务发现
+    │ ├── register.go    # 服务注册
     │ └── router.go
     ├── types # 类型定义模块
     │ └── type.go
