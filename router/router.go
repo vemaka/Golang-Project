@@ -31,6 +31,7 @@ func NewRouter() *Router {
 	return router
 }
 
+// 获取上下文
 func GetHTTPReqFromContext(ctx context.Context) (*types.HTTPReq, error) {
 
 	// ctxValue := ctx.Value("httpReq")
@@ -48,11 +49,12 @@ func (r *Router) AddRouter(path string, method string, handle http.HandlerFunc) 
 	r.handlers[path+"|"+method] = RouterHandler{path: path, method: method, handle: handle}
 }
 
+// 最后访问路由
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 
-	ctxValue := ctx.Value("httpReq")
-	fmt.Printf("Context value: %+v\n", ctxValue)
+	// ctxValue := ctx.Value("httpReq")
+	// fmt.Printf("Context value: %+v\n", ctxValue)
 
 	httpReq, err := GetHTTPReqFromContext(ctx)
 	if err != nil {

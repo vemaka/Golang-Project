@@ -3,6 +3,7 @@ package main
 import (
 	gw "Golang/gw"
 	"Golang/handler"
+	"Golang/middleware"
 	"fmt"
 	"net/http"
 )
@@ -18,7 +19,14 @@ func main() {
 
 	handler.RegisterAllServices()
 
-	err := http.ListenAndServe(":8080", mux)
+	// 中间件管理/应用
+	manager := middleware.NewMiddlewareManager()
+	manager.Use(middleware.LoggingMiddleware)
+	manager.Use(middleware.HealthCheck)
+
+	handle := manager.Apply(mux)
+
+	err := http.ListenAndServe(":8080", handle)
 	if err != nil {
 		fmt.Println("8080 port listen failed")
 	}

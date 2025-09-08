@@ -7,6 +7,7 @@ import (
 var globalRegistry = make(map[string]http.HandlerFunc)
 var updateChan = make(chan struct{})
 
+// 服务注册
 func RegisterService(path string, method string, handle http.HandlerFunc) {
 	// fmt.Println("RegisterService ........")
 	key := path + "|" + method

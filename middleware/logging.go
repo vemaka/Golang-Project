@@ -14,6 +14,9 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, req)
 
 		duration := time.Since(start)
-		fmt.Printf("| %s | %s | %s | %v | \n", req.Method, req.URL.Path, req.RemoteAddr, duration)
+		if req.Method != "GET" {
+			fmt.Printf("| %s | %s | %s | %v | \n", req.Method, req.URL.Path, req.RemoteAddr, duration)
+		}
+
 	})
 }

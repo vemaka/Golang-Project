@@ -6,6 +6,8 @@ import (
 	"regexp"
 )
 
+// 业务实现内容
+
 // TEST
 func GOODSell(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("Sell good!!!")
@@ -24,6 +26,11 @@ func GOODBuy(w http.ResponseWriter, req *http.Request) {
 	w.Write([]byte("Buy good!!!!"))
 }
 
+// 作为健康检查调用
+func HeartBeat(w http.ResponseWriter, req *http.Request) {
+
+}
+
 // GetOptions : 实现Get方法的具体内容
 func GetOptions(w http.ResponseWriter, req *http.Request) {
 	path := req.URL.Path
@@ -37,5 +44,3 @@ func GetOptions(w http.ResponseWriter, req *http.Request) {
 		http.NotFound(w, req)
 	}
 }
-
-

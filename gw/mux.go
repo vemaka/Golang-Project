@@ -11,6 +11,7 @@ import (
 	"Golang/types"
 )
 
+// mux 结构体
 type gw_mux struct {
 	s      *Server
 	router *r.Router
@@ -22,6 +23,7 @@ type Server struct {
 	Mux  http.ServeMux
 }
 
+// 创建mux实例
 func NewGWMux() *gw_mux {
 	mux := &gw_mux{
 		s: &Server{
@@ -33,7 +35,7 @@ func NewGWMux() *gw_mux {
 	return mux
 }
 
-// return json string
+// 返回 json 的字符串
 func extract_parameter(req *http.Request) (string, error) {
 
 	var ret string
@@ -73,6 +75,7 @@ func extract_parameter(req *http.Request) (string, error) {
 
 }
 
+// 访问的路由传入接口
 func (m *gw_mux) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// fmt.Println("Entering gw_mux ServeHTTP")

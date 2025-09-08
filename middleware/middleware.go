@@ -4,16 +4,26 @@ import (
 	"net/http"
 )
 
-// Middleware ：
 type Middleware func(http.Handler) http.Handler
 
-// Compose ： 整合中间件
-func Compose(middlewares ...Middleware) Middleware {
-	return func(final http.Handler) http.Handler {
+// MiddlewareManager : middleware 管理器 
+type MiddlewareManager struct {
+	middlewares []Middleware
+}
 
-		for i := len(middlewares) - 1; i >= 0; i-- {
-			final = middlewares[i](final)
-		}
-		return final
+func NewMiddlewareManager() *MiddlewareManager {
+	return &MiddlewareManager{
+		middlewares: make([]Middleware, 0),
 	}
+}
+
+func (mm *MiddlewareManager) Use(middleware Middleware) {
+	mm.middlewares = append(mm.middlewares, middleware)
+}
+
+func (mm *MiddlewareManager) Apply(handler http.Handler) http.Handler {
+	for i := len(mm.middlewares) - 1; i >= 0; i-- {
+		handler = mm.middlewares[i](handler)
+	}
+	return handler
 }
