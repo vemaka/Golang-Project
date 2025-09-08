@@ -9,8 +9,8 @@
     │ ├── handler.go       # 业务实现
     │ └── server.go 
     ├── middleware # 中间件模块
-    │ ├── healthcheck.go    # 轻答响应
-    │ ├── logging.go        # 日志
+    │ ├── healthcheck.go    
+    │ ├── logging.go       
     │ └── middleware.go
     ├── router # 路由管理
     │ ├── discover.go    # 服务发现
